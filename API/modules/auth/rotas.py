@@ -11,7 +11,7 @@ Diretores = [
         'cpf': 12345678910,
         'id': 1,
         'E-mail': 'carlosnoronha@eaprendizes.com',
-        'password': 741852,
+        'senha': 741852,
         'created_at': datetime(2022, 5, 1, 12, 0),
         'updated_at': datetime(2022, 5, 1, 12, 0),
      }
@@ -22,7 +22,7 @@ Professores = [
         'cpf': 98765432109,
         'id': 2,
         'E-mail': 'marcoshefa@eaprendizes.com',
-        'Senha': 963852,
+        'senha': 963852,
         'created_at': datetime(2022, 5, 1, 12, 0),
         'updated_at': datetime(2022, 5, 1, 12, 0),
      }
@@ -32,7 +32,7 @@ Alunos = [
         'Nome': 'Albert',
         'E-mail': 'albert@eaprendizes.com',
         'id': 3,
-        'Senha': 852741,
+        'senha': 852741,
         'created_at': datetime(2022, 5, 1, 12, 0),
         'updated_at': datetime(2022, 5, 1, 12, 0),
      }
@@ -56,12 +56,12 @@ def login_diretor():
     if not usuario_selecionado:
         return 'Usuário não encontrado', 404
 
-    if user['password'] != dados_recebido['password']:
+    if user['senha'] != dados_recebido['senha']:
         return 'Senha Incorreta', 403
     
     # formatamos o retorno
     return {
-        'messagem': 'Bem-Vindo, login realizado com Sucesso!',
+        'mensagem': 'Bem-Vindo, login realizado com Sucesso!',
         'email': dados_recebido['email']
     }
     
@@ -82,12 +82,12 @@ def login_professor():
     if not usuario_selecionado:
         return 'Usuário não encontrado', 404
 
-    if user['password'] != dados_recebido['password']:
+    if user['senha'] != dados_recebido['senha']:
         return 'Senha Incorreta', 403
     
     # formatamos o retorno
     return {
-        'messagem': 'Bem-Vindo, login realizado com Sucesso!',
+        'mensagem': 'Bem-Vindo, login realizado com Sucesso!',
         'email': dados_recebido['E-mail']
     }
 
@@ -108,11 +108,33 @@ def login_aluno():
     if not usuario_selecionado:
         return 'Usuário não encontrado', 404
 
-    if user['password'] != dados_recebido['password']:
+    if user['senha'] != dados_recebido['senha']:
         return 'Senha Incorreta', 403
     
     # formatamos o retorno
     return {
-        'messagem': 'Bem-Vindo, login realizado com Sucesso!',
+        'mensagem': 'Bem-Vindo, login realizado com Sucesso!',
         'email': dados_recebido['E-mail']
+    }
+
+@auth_rotas.route('/usuarios', methods=["GET"])
+def mostrar_usuarios():
+    dados_recebidos = request.args
+    if 'tipo' in dados_recebidos:
+        if dados_recebidos ['tipo'] == 'Professores':
+            return {
+                'Professores': Professores
+            }
+        if dados_recebidos ['tipo'] == 'Diretores':
+            return {
+                'Diretores': Diretores
+            }
+        if dados_recebidos ['tipo'] == 'Alunos':
+            return {
+                'Alunos': Alunos
+            }
+    return {
+        'Diretores': Diretores,
+        'Professores': Professores,
+        'Alunos': Alunos
     }
