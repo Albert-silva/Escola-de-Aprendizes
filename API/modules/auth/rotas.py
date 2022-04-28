@@ -164,8 +164,8 @@ def mostrar_usuario():
     return 'Usuário não encontrado!', 404
 
 
-@auth_rotas.route('/usuario', methods=["DELETE"])
-def user_deleted():
+@auth_rotas.route('/professor', methods=["DELETE"])
+def professor_delete():
     dados_recebido = request.args
     msg, status = validate_user_id(dados_recebido)
     if not status:
@@ -176,6 +176,18 @@ def user_deleted():
         if user['id'] != int(dados_recebido['id']):
             new_users.append(user)
     
+    return {
+        'new_users_list': new_users
+    }
+    
+@auth_rotas.route('/aluno', methods=["DELETE"])
+def aluno_delete():
+    dados_recebido = request.args
+    msg, status = validate_user_id(dados_recebido)
+    if not status:
+        return msg, 400
+
+    new_users = []
     for user in Alunos:
         if user['id'] != int(dados_recebido['id']):
             new_users.append(user)
@@ -184,8 +196,8 @@ def user_deleted():
         'new_users_list': new_users
     }
 
-@auth_rotas.route('/usario', methods=["PUT"])
-def user_update():
+@auth_rotas.route('/professor', methods=["PUT"])
+def professor_update():
     dados_recebido_url = request.args
     msg, status = validate_user_id(dados_recebido_url)
     if not status:
@@ -202,7 +214,20 @@ def user_update():
             if 'email' in dados_recebido_corpo:
                 user['email'] = dados_recebido_corpo['email']
         new_users.append(user)
+    return {
+        'new_users_list': new_users
+    }
 
+@auth_rotas.route('/aluno', methods=["PUT"])
+def aluno_update():
+    dados_recebido_url = request.args
+    msg, status = validate_user_id(dados_recebido_url)
+    if not status:
+        return msg, 400
+
+    dados_recebido_corpo = request.json
+
+    new_users = []
     for user in Alunos:
         if int(dados_recebido_url['id']) == user['id']:
             if 'nome' in dados_recebido_corpo:
@@ -216,32 +241,30 @@ def user_update():
         'new_users_list': new_users
     }
 
-@auth_rotas.route('/usuario', methods=["POST"])
-def criar_usuario():
-    dados_recebidos_corpo = request.args
+@auth_rotas.route('/professor', methods=["POST"])
+def criar_professor():
+    dados_recebidos_corpo = request.json
 
     new_users = []
     for dados_recebidos_corpo in Professores:
-        if dados_recebidos_corpo ['cpf'] != Professores['cpf']:
-            Professores['cpf'] = dados_recebidos_corpo['cpf']
-       
-        if dados_recebidos_corpo ['email'] != Professores['Email']:
-            Professores['Email'] = dados_recebidos_corpo['cpf']
-       
-        if dados_recebidos_corpo ['nome'] != Professores['nome']:
-            Professores['nome'] = dados_recebidos_corpo['nome']
-    new_users.append(Professores)
+        if dados_recebidos_corpo ['cpf'] == Professores['cpf']:
+            return 'Professor já existe!', 409
+    new_users.append(dados_recebidos_corpo)
+    
+    return{
+        'new_users_list': new_users
+    }
+
+@auth_rotas.route('/aluno', methods=["POST"])
+def criar_aluno():
+    dados_recebidos_corpo = request.json
+
+    new_users = []
 
     for dados_recebidos_corpo in Alunos:
-        if dados_recebidos_corpo ['cpf'] != Alunos['cpf']:
-            Alunos['cpf'] = dados_recebidos_corpo['cpf']
-       
-        if dados_recebidos_corpo ['email'] != Alunos['Email']:
-            Alunos['Email'] = dados_recebidos_corpo['cpf']
-       
-        if dados_recebidos_corpo ['nome'] != Alunos['nome']:
-            Alunos['nome'] = dados_recebidos_corpo['nome']
-    new_users.append(Alunos)
+        if dados_recebidos_corpo ['cpf'] == Alunos['cpf']:
+            return 'Aluno já existe!', 409
+    new_users.append(dados_recebidos_corpo)
    
     return{
         'new_users_list': new_users
