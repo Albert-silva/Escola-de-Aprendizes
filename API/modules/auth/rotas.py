@@ -1,7 +1,7 @@
 from flask import Blueprint, request
 
 from modules.auth.validacao import login_validado, validate_user_id
-from modules.auth.controllers import login_dir, login_pro, login_alu, todos_usuarios, um_usuario, professor_del, aluno_del, professor_up, aluno_up, create_professor, create_aluno
+from modules.auth.controllers import login_dir, login_pro, login_alu, todos_usuarios, um_usuario, professor_del, aluno_del, professor_up, aluno_up, professor_cre, aluno_cre
 
 auth_rotas = Blueprint ('auth', __name__)
 
@@ -139,7 +139,7 @@ def criar_professor():
         return msg, 400
 
     dados_recebidos_corpo = request. json 
-    new_users = create_professor (dados_recebidos_corpo)
+    new_users = professor_cre (dados_recebidos_corpo)
     
     return{
         'new_users_list': new_users
@@ -153,7 +153,7 @@ def criar_aluno():
         return msg, 400
 
     dados_recebidos_corpo = request. json 
-    new_users = create_aluno (dados_recebidos_corpo)
+    new_users = aluno_cre (dados_recebidos_corpo)
     
     return{
         'new_users_list': new_users

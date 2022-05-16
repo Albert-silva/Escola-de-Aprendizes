@@ -138,9 +138,6 @@ def professor_up (id, user_infos):
 
             if 'email' in user_infos:
                 user['email'] = user_infos['email']
-
-            if 'celular' in user_infos:
-                user['celular'] = user_infos['celular']
         new_users.append(user)
     return new_users
 
@@ -153,31 +150,27 @@ def aluno_up (id, user_infos):
 
             if 'email' in user_infos:
                 user['email'] = user_infos['email']
-
-            if 'celular' in user_infos:
-                user['celular'] = user_infos['celular']
         new_users.append(user)
     return new_users
 
-def create_professor():
-    dados_recebidos_corpo = request.json
+def professor_cre(id, user_infos):
 
     new_users = []
-    for dados_recebidos_corpo in Professores:
-        if dados_recebidos_corpo ['cpf'] == Professores['cpf']:
-            return 'Professor já existe!', 409
-    new_users.append(dados_recebidos_corpo)
+    for user in Professores:
+        if int(id) == user['id']:
+            if  'Email' in user_infos:
+                return 'Professor já existe!', 409
+    new_users.append()
     
     return new_users
 
-def create_aluno():
-    dados_recebidos_corpo = request.json
+def aluno_cre(id, user_infos):
 
     new_users = []
-
-    for dados_recebidos_corpo in Alunos:
-        if dados_recebidos_corpo ['cpf'] == Alunos['cpf']:
-            return 'Aluno já existe!', 409
-    new_users.append(dados_recebidos_corpo)
-   
+    for user in Alunos:
+        if int(id) == user ['id']:
+            if 'Email' in user_infos:
+                return 'Aluno já existe!', 409
+    new_users.append()
+    
     return new_users
