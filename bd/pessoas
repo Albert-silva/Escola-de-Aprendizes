@@ -1,0 +1,32 @@
+Diretores = [
+    {
+        'Nome': 'Beto',
+        'cpf': 12345678910,
+        'id': 1,
+        'Email': 'carlosnoronha@eaprendizes.com',
+        'senha': 741852,
+        'created_at': datetime(2022, 5, 1, 12, 0),
+        'updated_at': datetime(2022, 5, 1, 12, 0),
+     }
+]
+Professores = [ 
+    {
+        'Nome': 'Marcos',
+        'cpf': 98765432109,
+        'id': 2,
+        'Email': 'marcoshefa@eaprendizes.com',
+        'senha': 963852,
+        'created_at': datetime(2022, 5, 1, 12, 0),
+        'updated_at': datetime(2022, 5, 1, 12, 0),
+     }
+]
+Alunos = [
+    { 
+        'Nome': 'Albert',
+        'Email': 'albert@eaprendizes.com',
+        'id': 3,
+        'senha': 852741,
+        'created_at': datetime(2022, 5, 1, 12, 0),
+        'updated_at': datetime(2022, 5, 1, 12, 0),
+     }
+]

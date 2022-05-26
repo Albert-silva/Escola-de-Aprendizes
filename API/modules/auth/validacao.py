@@ -10,4 +10,4 @@ def login_validado(dados_recebidos):
 def validate_user_id (dados_recebidos):
     if not dados_recebidos.get('id'):
         return 'O id é obrigatório', False
-    return '', False 
+    return '', True

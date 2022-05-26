@@ -1,176 +1,327 @@
 from datetime import datetime
 from flask import request
 
-Diretores = [
-    {
-        'Nome': 'Beto',
-        'cpf': 12345678910,
-        'id': 1,
-        'Email': 'carlosnoronha@eaprendizes.com',
-        'senha': 741852,
-        'created_at': datetime(2022, 5, 1, 12, 0),
-        'updated_at': datetime(2022, 5, 1, 12, 0),
-     }
-]
-Professores = [ 
-    {
-        'Nome': 'Marcos',
-        'cpf': 98765432109,
-        'id': 2,
-        'Email': 'marcoshefa@eaprendizes.com',
-        'senha': 963852,
-        'created_at': datetime(2022, 5, 1, 12, 0),
-        'updated_at': datetime(2022, 5, 1, 12, 0),
-     }
-]
-Alunos = [
-    { 
-        'Nome': 'Albert',
-        'Email': 'albert@eaprendizes.com',
-        'id': 3,
-        'senha': 852741,
-        'created_at': datetime(2022, 5, 1, 12, 0),
-        'updated_at': datetime(2022, 5, 1, 12, 0),
-     }
-]
+from database import mysql
 
 def login_dir(dados_recebido):
-    usuario_selecionado = None
-    for user in Diretores:
-        if user['Email'] == dados_recebido['email']:
-            usuario_selecionado = user
-            break
+    cursor = mysql.get_db().cursor()
+
+    cursor.execute("SELECT * FROM Diretor WHERE Email = %s", [dados_recebido['email']])
+    usuario_selecionado = cursor.fetchone()
 
     if not usuario_selecionado:
         return 'Usuário não encontrado', 404
 
-    if user['senha'] != dados_recebido['senha']:
+    if usuario_selecionado[6] != dados_recebido['senha']:
         return 'Senha Incorreta', 403
+
+    cursor.close()
+
     return '', 200
 
 def login_pro(dados_recebido):
-    usuario_selecionado = None
-    for user in Professores:
-        if user['Email'] == dados_recebido['Email']:
-            usuario_selecionado = user
-            break
+    cursor = mysql.get_db().cursor()
+
+    cursor.execute("SELECT * FROM Professores WHERE email = %s", [dados_recebido['email']])
+    usuario_selecionado = cursor.fetchone()
 
     if not usuario_selecionado:
         return 'Usuário não encontrado', 404
 
-    if user['senha'] != dados_recebido['senha']:
+    if usuario_selecionado[6] != dados_recebido['senha']:
         return 'Senha Incorreta', 403
+
+    cursor.close()
+
     return '', 200
 
 def login_alu(dados_recebido):
-    usuario_selecionado = None
-    for user in Alunos:
-        if user['Email'] == dados_recebido['Email']:
-            usuario_selecionado = user
-            break
+    cursor = mysql.get_db().cursor()
+
+    cursor.execute("SELECT * FROM Alunos WHERE email = %s", [dados_recebido['email']])
+    usuario_selecionado = cursor.fetchone()
 
     if not usuario_selecionado:
         return 'Usuário não encontrado', 404
 
-    if user['senha'] != dados_recebido['senha']:
+    if usuario_selecionado[5] != dados_recebido['senha']:
         return 'Senha Incorreta', 403
+
+    cursor.close()
+
     return '', 200
 
-def todos_usuarios ():
-    dados_recebidos = request.args
-    if 'tipo' in dados_recebidos:
-        if dados_recebidos ['tipo'] == 'Professores':
-            return {
-                'Professores': Professores
-            }
-        if dados_recebidos ['tipo'] == 'Diretores':
-            return {
-                'Diretores': Diretores
-            }
-        if dados_recebidos ['tipo'] == 'Alunos':
-            return {
-                'Alunos': Alunos
-            }
-    return {
-        'Diretores': Diretores,
-        'Professores': Professores,
-        'Alunos': Alunos
-    }
+def todos_usuarios_dir ():
+    cursor = mysql.get_db().cursor()
 
-def um_usuario (id):
-    for user in Diretores:
-        if int(id) == user['id']:
-            del user['senha']
-            return user
-    
-    for user in Professores:
-        if int(id) == user['id']:
-            del user['senha']
-            return user
-    
-    for user in Alunos:
-        if int(id) == user['id']:
-            del user['senha']
-            return user
+    cursor.execute("SELECT * FROM Diretor")
 
-    return None 
+    users_db = cursor.fetchall()
+
+    all_users = []
+
+    for user in users_db:
+        new_user = {
+            'Nome': user[0],
+            'cpf': user[1],
+            'E-mail': user[2],
+            'id': user[3],
+            'Createdat': user[4],
+            'Edictedat': user[5]
+
+        }
+
+        all_users.append(new_user)
+
+    cursor.close()
+
+    return all_users
+
+def todos_usuarios_pro ():
+    cursor = mysql.get_db().cursor()
+
+    cursor.execute("SELECT * FROM Professores")
+
+    users_db = cursor.fetchall()
+
+    all_users = []
+
+    for user in users_db:
+        new_user = {
+            'Nome': user[0],
+            'cpf': user[1],
+            'E-mail': user[2],
+            'id': user[3],
+            'Createdat': user[4],
+            'Edictedat': user[5]
+
+        }
+
+        all_users.append(new_user)
+
+    cursor.close()
+
+    return all_users
+
+def todos_usuarios_alu ():
+    cursor = mysql.get_db().cursor()
+
+    cursor.execute("SELECT * FROM Alunos")
+
+    users_db = cursor.fetchall()
+
+    all_users = []
+
+    for user in users_db:
+        new_user = {
+            'Nome': user[0],
+            'E-mail': user[1],
+            'id': user[2],
+            'Createdat': user[3],
+            'Edictedat': user[4]
+
+        }
+
+        all_users.append(new_user)
+
+    cursor.close()
+
+    return all_users
+
+def um_usuario_dir (id):
+    cursor = mysql.get_db().cursor()
+
+    cursor.execute("SELECT * FROM Diretor WHERE id = %s", [id])
+
+    user_db = cursor.fetchone()
+
+    if user_db :
+        user = {
+            'Nome': user_db[0],
+            'cpf': user_db[1],
+            'E-mail': user_db[2],
+            'id': user_db[3],
+            'Createdat': user_db[4],
+            'Edictedat': user_db[5]
+
+        }
+        return user
+    cursor.close()
+
+    return None
+
+def um_usuario_pro (id):
+    cursor = mysql.get_db().cursor()
+
+    cursor.execute("SELECT * FROM Professores WHERE id = %s", [id])
+
+    user_db = cursor.fetchone()
+
+    if user_db :
+        user = {
+            'Nome': user_db[0],
+            'cpf': user_db[1],
+            'E-mail': user_db[2],
+            'id': user_db[3],
+            'Createdat': user_db[4],
+            'Edictedat': user_db[5]
+
+        }
+        return user
+    cursor.close()
+
+    return None
+
+def um_usuario_alu (id):
+    cursor = mysql.get_db().cursor()
+
+    cursor.execute("SELECT * FROM Alunos WHERE id = %s", [id])
+
+    user_db = cursor.fetchone()
+
+    if user_db :
+        user = {
+            'Nome': user_db[0],
+            'E-mail': user_db[1],
+            'id': user_db[2],
+            'Createdat': user_db[3],
+            'Edictedat': user_db[4]
+
+        }
+        return user
+    cursor.close()
+
+    return None
 
 def professor_del (id):
-    new_users = []
-    for user in Professores:
-        if user['id'] != int(id):
-            new_users.append(user)
-    return new_users
+    cursor = mysql.get_db().cursor()
+
+    # verificar se existe o usuario com o ID X no banco
+    cursor.execute("SELECT * FROM Professores WHERE id = %s", [id])
+    usuario_selecionado = cursor.fetchone()
+
+    if not usuario_selecionado:
+        return 'Usuário não encontrado', 404
+    
+    cursor.execute("DELETE FROM Professores WHERE id = %s", [id])
+
+    mysql.get_db().commit()
+
+    cursor.close()
+    
+    return 'Usuário deletado com sucesso!', 200
 
 def aluno_del (id):
-    new_users = []
-    for user in Alunos:
-        if user['id'] != int(id):
-            new_users.append(user)
-    return new_users
+    cursor = mysql.get_db().cursor()
+
+    # verificar se existe o usuario com o ID X no banco
+    cursor.execute("SELECT * FROM Alunos WHERE id = %s", [id])
+    usuario_selecionado = cursor.fetchone()
+
+    if not usuario_selecionado:
+        return 'Usuário não encontrado', 404
+    
+    cursor.execute("DELETE FROM Alunos WHERE id = %s", [id])
+
+    mysql.get_db().commit()
+
+    cursor.close()
+    
+    return 'Usuário deletado com sucesso!', 200
 
 def professor_up (id, user_infos):
-    new_users = []
-    for user in Professores:
-        if int(id) == user['id']:
-            if 'nome' in user_infos:
-                user['name'] = user_infos['nome']
+    cursor = mysql.get_db().cursor()
 
-            if 'email' in user_infos:
-                user['email'] = user_infos['email']
-        new_users.append(user)
-    return new_users
+    # verificar se existe o usuario com o ID X no banco
+    cursor.execute("SELECT * FROM Professores WHERE id = %s", [id])
+    usuario_selecionado = cursor.fetchone()
+
+    if not usuario_selecionado:
+        return 'Usuário não encontrado', 404
+
+    # organizar as novas informacoes
+    novo_nome = user_infos['nome']
+    novo_email = user_infos['email']
+    novo_cpf = user_infos['cpf']
+    data_atual = datetime.now()
+
+    # atualizar no banco de dados com as novas informacoes para o usuario
+    cursor.execute("UPDATE Professores SET nome = %s, email = %s, cpf = %s, edictedat = %s WHERE id = %s", 
+        [novo_nome, novo_email, novo_cpf, data_atual, id])
+
+    mysql.get_db().commit()
+
+    cursor.close()
+
+    return 'Usuário atualizado com sucesso!', 200
 
 def aluno_up (id, user_infos):
-    new_users = []
-    for user in Alunos:
-        if int(id) == user['id']:
-            if 'nome' in user_infos:
-                user['name'] = user_infos['nome']
+    cursor = mysql.get_db().cursor()
 
-            if 'email' in user_infos:
-                user['email'] = user_infos['email']
-        new_users.append(user)
-    return new_users
+    # verificar se existe o usuario com o ID X no banco
+    cursor.execute("SELECT * FROM Alunos WHERE id = %s", [id])
+    usuario_selecionado = cursor.fetchone()
+
+    if not usuario_selecionado:
+        return 'Usuário não encontrado', 404
+
+    # organizar as novas informacoes
+    novo_nome = user_infos['nome']
+    novo_email = user_infos['email']
+    data_atual = datetime.now()
+
+    # atualizar no banco de dados com as novas informacoes para o usuario
+    cursor.execute("UPDATE Alunos SET nome = %s, email = %s, edictedat = %s WHERE id = %s", 
+        [novo_nome, novo_email, data_atual, id])
+
+    mysql.get_db().commit()
+
+    cursor.close()
+
+    return 'Usuário atualizado com sucesso!', 200
 
 def professor_cre(id, user_infos):
+    cursor = mysql.get_db().cursor()
+    cursor.execute("SELECT * FROM Professores where id = %s", [id])
+    usuario_selecionado = cursor.fetchone()
 
-    new_users = []
-    for user in Professores:
-        if int(id) == user['id']:
-            if  'Email' in user_infos:
-                return 'Professor já existe!', 409
-    new_users.append()
+    if usuario_selecionado:
+        return 'Usuário já existe', 404
     
-    return new_users
+    nome  = user_infos['nome']
+    cpf = user_infos['cpf']
+    email = user_infos['email']
+    senha = user_infos['senha']
+    data = datetime.now()
+
+    cursor.execute("INSERT INTO Professores (nome , cpf , email , senha , createdeat) VALUES (%s, %s, %s, %s, %s)",
+    [nome, cpf, email, senha, data])
+
+    mysql.get_db().commit()
+
+    cursor.close()
+
+    return 'Professor cadastrado com sucesso', 200
 
 def aluno_cre(id, user_infos):
 
-    new_users = []
-    for user in Alunos:
-        if int(id) == user ['id']:
-            if 'Email' in user_infos:
-                return 'Aluno já existe!', 409
-    new_users.append()
+    cursor = mysql.get_db().cursor()
+    cursor.execute("SELECT * FROM Alunos where id = %s", [id])
+    usuario_selecionado = cursor.fetchone()
+
+    if usuario_selecionado:
+        return 'Usuário não existe', 404
     
-    return new_users
+    nome  = user_infos['nome']
+    email = user_infos['email']
+    senha = user_infos['senha']
+    data = datetime.now()
+
+    cursor.execute("INSERT INTO Alunos (nome, email , senha , createdeat) VALUES (%s, %s, %s, %s)",
+    [nome, email, senha, data])
+
+    mysql.get_db().commit()
+
+    cursor.close()
+
+    return 'Aluno cadastrado com sucesso', 200
