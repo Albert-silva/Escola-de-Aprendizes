@@ -1,4 +1,6 @@
-from datetime import datetime
+import jwt
+import pytz
+from datetime import datetime, timedelta
 from flask import request
 
 from database import mysql
@@ -14,10 +16,20 @@ def login_dir(dados_recebido):
 
     if usuario_selecionado[6] != dados_recebido['senha']:
         return 'Senha Incorreta', 403
+    
+    data_hora_atual = datetime.now(tz=pytz.timezone('America/Sao_Paulo'))
+    dados = {
+        'nome': usuario_selecionado[0],
+        'id': usuario_selecionado[3],
+        'iat': data_hora_atual,
+        'exp': data_hora_atual + timedelta(hours=8000),
+        'tipo': 'Diretor'
+    }
+    token = jwt.encode(dados, "SENHA_TOKEN", algorithm="HS256")
 
     cursor.close()
 
-    return '', 200
+    return token, 200
 
 def login_pro(dados_recebido):
     cursor = mysql.get_db().cursor()
@@ -31,9 +43,19 @@ def login_pro(dados_recebido):
     if usuario_selecionado[6] != dados_recebido['senha']:
         return 'Senha Incorreta', 403
 
+    data_hora_atual = datetime.now(tz=pytz.timezone('America/Sao_Paulo'))
+    dados = {
+        'nome': usuario_selecionado[0],
+        'id': usuario_selecionado[3],
+        'iat': data_hora_atual,
+        'exp': data_hora_atual + timedelta(hours=8000),
+        'tipo': 'Professores'
+    }
+    token = jwt.encode(dados, "SENHA_TOKEN", algorithm="HS256")
+
     cursor.close()
 
-    return '', 200
+    return token, 200
 
 def login_alu(dados_recebido):
     cursor = mysql.get_db().cursor()
@@ -46,10 +68,20 @@ def login_alu(dados_recebido):
 
     if usuario_selecionado[5] != dados_recebido['senha']:
         return 'Senha Incorreta', 403
+    
+    data_hora_atual = datetime.now(tz=pytz.timezone('America/Sao_Paulo'))
+    dados = {
+        'nome': usuario_selecionado[0],
+        'id': usuario_selecionado[2],
+        'iat': data_hora_atual,
+        'exp': data_hora_atual + timedelta(hours=8000),
+        'tipo': 'Alunos'
+    }
+    token = jwt.encode(dados, "SENHA_TOKEN", algorithm="HS256")
 
     cursor.close()
 
-    return '', 200
+    return token, 200
 
 def todos_usuarios_dir ():
     cursor = mysql.get_db().cursor()
