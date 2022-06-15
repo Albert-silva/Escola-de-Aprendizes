@@ -31,7 +31,7 @@ Sistema de escola desenvolvido na float academy
 ```
 ## Running
 
-Access the `db` folder and execute `codigodb` file in your database.
+Access the `bd` folder and execute `codigodb` file in your database.
 
 then, running in command line:
 
