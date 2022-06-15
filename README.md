@@ -14,6 +14,8 @@ Sistema de escola desenvolvido na float academy
 ```
     git clone git@github.com:Albert-silva/Escola-de-Aprendizes.git
 
+```
+```
     cd Escola-de-Aprendizes
 ```
 
@@ -22,9 +24,11 @@ Sistema de escola desenvolvido na float academy
 ```
     cd api/
 
-    pip3 install -r requirements.txt
 ```
+```
+    pip3 install -r requirements.txt
 
+```
 ## Running
 
 Access the `db` folder and execute `setup.sql` file in your database.
