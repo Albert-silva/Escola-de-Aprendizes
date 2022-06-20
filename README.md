@@ -22,7 +22,7 @@ Sistema de escola desenvolvido na float academy
 ### Install dependencias
 
 ```
-    cd api/
+    cd API/
 
 ```
 ```
@@ -33,10 +33,6 @@ Sistema de escola desenvolvido na float academy
 
 Access the `bd` folder and execute `codigodb` file in your database.
 
-then, running in command line:
-
-```
-FLASK_APP=api/app.py flask run
-```
+then, running in play and debug 
 
 open http://localhost:5000/

@@ -1,3 +1,5 @@
+CREATE SCHEMA IF NOT EXISTS `EAprendizes`;
+
 CREATE TABLE IF NOT EXISTS `EAprendizes`.`Diretor` (
   `Nome` VARCHAR(255) NOT NULL,
   `cpf` VARCHAR(20) NOT NULL,
@@ -8,7 +10,7 @@ CREATE TABLE IF NOT EXISTS `EAprendizes`.`Diretor` (
   `Senha` VARCHAR(255) NOT NULL,
   PRIMARY KEY (`id`),
   UNIQUE INDEX `CPF_UNIQUE` (`cpf` ASC))
-ENGINE = InnoDB AUTO_INCREMENT=1
+ENGINE = InnoDB AUTO_INCREMENT=1;
 CREATE TABLE IF NOT EXISTS `EAprendizes`.`Professores` (
   `Nome` VARCHAR(255) NOT NULL,
   `cpf` VARCHAR(20) NOT NULL,
@@ -19,7 +21,7 @@ CREATE TABLE IF NOT EXISTS `EAprendizes`.`Professores` (
   `Senha` VARCHAR(255) NOT NULL,
   PRIMARY KEY (`id`),
   UNIQUE INDEX `CPF_UNIQUE` (`cpf` ASC))
-ENGINE = InnoDB AUTO_INCREMENT=1
+ENGINE = InnoDB AUTO_INCREMENT=1;
 CREATE TABLE IF NOT EXISTS `EAprendizes`.`Alunos` (
   `Nome` VARCHAR(255) NOT NULL,
   `Email` VARCHAR(255) NOT NULL,
@@ -28,5 +30,10 @@ CREATE TABLE IF NOT EXISTS `EAprendizes`.`Alunos` (
   `Edictedat` TIMESTAMP NULL,
   `Senha` VARCHAR(255) NOT NULL,
   PRIMARY KEY (`id`))
-ENGINE = InnoDB AUTO_INCREMENT=1
-COMMENT = '\n'
+ENGINE = InnoDB AUTO_INCREMENT=1;
+
+INSERT INTO `EAprendizes`.`Diretor` (`nome`, `cpf`, `Email`, `id`, `senha`) VALUES ('Beto', '12345678910', 'carlosnoronha@eaprendizes.com', '1', '1741852');
+
+INSERT INTO `EAprendizes`.`Professores` (`nome`, `cpf`, `Email`, `id`, `senha`) VALUES ('Marcos', '98765432109', 'marcoshefa@eaprendizes.com', '2', '963852');
+
+INSERT INTO `EAprendizes`.`Alunos` (`nome`, `Email`, `id`, `senha`) VALUES ('Albert', 'albert@eaprendizes.com', '3', '852741');
