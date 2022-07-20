@@ -124,7 +124,7 @@ def mostrar_usuario_dir():
 def mostrar_usuario_pro():
     dados_recebidos = request.args
     dados_usuarios = request.user
-    if dados_usuarios ['tipo'] != 'Diretor' and dados_usuarios ['tipo'] == 'Alunos' and (dados_usuarios ['tipo'] == 'Professores' and dados_usuarios['id'] != int (dados_recebidos['id'])):
+    if dados_usuarios ['tipo'] != 'Diretor' or dados_usuarios ['tipo'] == 'Alunos' or (dados_usuarios ['tipo'] == 'Professores' or dados_usuarios['id'] != int (dados_recebidos['id'])):
         return 'Usuário não autorizado!', 403
 
     msg, status = validate_user_id (dados_recebidos)
@@ -139,7 +139,7 @@ def mostrar_usuario_pro():
 def mostrar_usuario_alu():
     dados_recebidos = request.args
     dados_usuarios = request.user
-    if dados_usuarios ['tipo'] != 'Diretor' and dados_usuarios ['tipo'] == 'Professores' and (dados_usuarios ['tipo'] == 'Alunos' and dados_usuarios['id'] != int (dados_recebidos['id'])):
+    if dados_usuarios ['tipo'] != 'Diretor' or dados_usuarios ['tipo'] == 'Professores' or (dados_usuarios ['tipo'] == 'Alunos' and dados_usuarios['id'] != int (dados_recebidos['id'])):
         return 'Usuário não autorizado!', 403
 
     msg, status = validate_user_id (dados_recebidos)
@@ -156,7 +156,7 @@ def mostrar_usuario_alu():
 def professor_delete():
     dados_recebido = request.args
     dados_usuarios = request.user
-    if dados_usuarios ['tipo'] != 'Diretor' and (dados_usuarios ['tipo'] == 'Professores' and dados_usuarios['id'] != int (dados_recebido['id'])):
+    if dados_usuarios ['tipo'] != 'Diretor' or (dados_usuarios ['tipo'] == 'Professores' or dados_usuarios['id'] != int (dados_recebido['id'])):
         return 'Usuário não autorizado!', 403
 
     msg, status = validate_user_id(dados_recebido)
@@ -186,7 +186,7 @@ def aluno_delete():
 def professor_update():
     dados_recebido_url = request.args
     dados_usuarios = request.user
-    if dados_usuarios ['tipo'] != 'Diretor' and dados_usuarios ['tipo'] == 'Alunos' and (dados_usuarios ['tipo'] == 'Professores' and dados_usuarios['id'] != int (dados_recebido_url['id'])):
+    if dados_usuarios ['tipo'] != 'Diretor' and dados_usuarios ['tipo'] == 'Alunos' or (dados_usuarios ['tipo'] == 'Professores' and dados_usuarios['id'] != int (dados_recebido_url['id'])):
         return 'Usuário não autorizado!', 403
 
     msg, status = validate_user_id(dados_recebido_url)
@@ -203,7 +203,7 @@ def professor_update():
 def aluno_update():
     dados_recebido_url = request.args
     dados_usuarios = request.user
-    if dados_usuarios ['tipo'] != 'Diretor' and dados_usuarios ['tipo'] == 'Professores' and (dados_usuarios ['tipo'] == 'Alunos' and dados_usuarios['id'] != int (dados_recebido_url['id'])):
+    if dados_usuarios ['tipo'] != 'Diretor' or dados_usuarios ['tipo'] == 'Professores' or (dados_usuarios ['tipo'] == 'Alunos' and dados_usuarios['id'] != int (dados_recebido_url['id'])):
         return 'Usuário não autorizado!', 403
 
     msg, status = validate_user_id(dados_recebido_url)

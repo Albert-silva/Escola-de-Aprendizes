@@ -5,27 +5,42 @@
         <meta charset="UTF-8">
         <meta http-equiv="X-UA-Compatible" content="IE=edge">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
-        <title>Float News - Blog de tecnologia</title>
+        <title>Escola de Aprendizes </title>
         
+        <link rel="preconnect" href="https://fonts.googleapis.com">
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link href="https://fonts.googleapis.com/css2?family=Inter:wght@100;200;300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+    
         <link rel="stylesheet" href="static/css/estilo.css">
         <script src="static/js/index.js"></script>
     </head>
 
     <body>
-        <h1 id="titulo">Titulo: Hello World!</h1>
-        <button onclick="trocaCor()">troca cor do titulo</button>
+        <div class="login">
+            <img src="static/images/logo.png" alt="Logo Escola de Aprendizes" />
 
-        <br>
-        <br>
+            <div class="container">
 
-        <div id="alerta" class="alerta"></div>
-        <input type="email" id="email" placeholder="digite seu email">
-        <input type="password" id="password" placeholder="digite sua senha">
+                <form class="form">
+                    <p>Faça seu login</p>
+                    <div class="buttom">  
 
-        <br>
-        <br>
+                        <div class="box-inputs">
+                            <input type="email" id="email" placeholder="E-mail"> 
+                            <input type="password" id="password" placeholder="Senha">  
+                        </div>
 
-        <button onclick="chamaLogin()">login</button>
-    </body>
+                        <div class="box-buttons">
+                                <button class="btn-login" type="button" onclick="Login()">ENTRAR</button>
+                            <select tipo="select" id="tipo"> 
+                                <option value="Diretor">Diretor</option>
+                                <option value="Professor">Professor</option>
+                                <option value="Aluno">Aluno</option>
+                            </select> 
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
 
 </html>
