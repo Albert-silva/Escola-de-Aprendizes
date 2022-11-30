@@ -157,7 +157,7 @@ def professor_delete():
     dados_recebido = request.args
     dados_usuarios = request.user
     if dados_usuarios ['tipo'] != 'Diretor' or (dados_usuarios ['tipo'] == 'Professores' or dados_usuarios['id'] != int (dados_recebido['id'])):
-        return 'Usuário não autorizado!', 403
+        return 'Usuário não autorizado!', 403 
 
     msg, status = validate_user_id(dados_recebido)
     if not status:

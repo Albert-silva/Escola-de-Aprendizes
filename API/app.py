@@ -1,5 +1,6 @@
 from flask import Flask
 from modules.auth.rotas import auth_rotas
+from modules.conteudo.rotas import conteudo_rotas
 from flask_cors import CORS
 from database import mysql
 
@@ -15,5 +16,6 @@ app.config['MYSQL_DATABASE_DB'] = 'EAprendizes'
 mysql.init_app(app)
 
 app.register_blueprint(auth_rotas)
+app.register_blueprint(conteudo_rotas)
 
 app.run("localhost", 5000)
