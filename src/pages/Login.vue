@@ -50,20 +50,26 @@ export default {
         if (this.tipo == "Diretor"){
         const resposta = await AuthService.loginDiretor(credentials);
         localStorage.setItem("token", resposta.data.token);
-        console.log("mudar para a outra rota!");
+
+        this.$router.push({path: '/dash'});
         }
+
         else if (this.tipo == "Professor"){
         const resposta = await AuthService.loginProfessor(credentials);
         localStorage.setItem("token", resposta.data.token);
-        console.log("mudar para a outra rota!");
+
+        this.$router.push({path: '/dash'});
         }
+
         else if (this.tipo == "Aluno"){
         const resposta = await AuthService.loginAluno(credentials);
         localStorage.setItem("token", resposta.data.token);
-        console.log("mudar para a outra rota!");
+        this.$router.push({path: '/dash'});
+
         }
+
       } catch (err) {
-        const mensagemErro = err.response.data;
+        const mensagemErro = err && err.response && err.response.data ? err.response.data : "Erro ao Logar!";
         this.alerta = mensagemErro;
       }
     },
