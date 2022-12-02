@@ -38,10 +38,10 @@ def login_pro(dados_recebido):
     usuario_selecionado = cursor.fetchone()
 
     if not usuario_selecionado:
-        return 'Usuário não encontrado', 404
+        return 'Usuário não encontrado', None, 404
 
     if usuario_selecionado[6] != dados_recebido['senha']:
-        return 'Senha Incorreta', 403
+        return 'Senha Incorreta', None, 403
 
     data_hora_atual = datetime.now(tz=pytz.timezone('America/Sao_Paulo'))
     dados = {
@@ -55,7 +55,7 @@ def login_pro(dados_recebido):
 
     cursor.close()
 
-    return token, 200
+    return token, usuario_selecionado[3], 200
 
 def login_alu(dados_recebido):
     cursor = mysql.get_db().cursor()
@@ -147,7 +147,7 @@ def todos_usuarios_alu ():
     for user in users_db:
         new_user = {
             'Nome': user[0],
-            'E-mail': user[1],
+            'Email': user[1],
             'id': user[2],
             'Createdat': user[3],
             'Edictedat': user[4]
@@ -193,7 +193,7 @@ def um_usuario_pro (id):
         user = {
             'Nome': user_db[0],
             'cpf': user_db[1],
-            'E-mail': user_db[2],
+            'Email': user_db[2],
             'id': user_db[3],
             'Createdat': user_db[4],
             'Edictedat': user_db[5]

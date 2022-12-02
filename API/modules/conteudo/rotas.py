@@ -8,7 +8,11 @@ conteudo_rotas = Blueprint ('conteudo', __name__, url_prefix="/conteudo")
 @conteudo_rotas.route('/', methods=["GET"])
 @validate_token
 def lista_conteudos_route():
-    conteudos = lista_conteudos()
+    user_id = None
+    if request.user['tipo'] == 'Alunos':
+        user_id = request.user['id']
+
+    conteudos = lista_conteudos(user_id)
 
     return {
         "conteudos": conteudos
@@ -87,6 +91,25 @@ def cria_conteudo_route():
         "message": msg
     }, status_code
 
+@conteudo_rotas.route('/criaalunoconteudo/', methods=["POST"])
+@validate_token
+def cria_conteudoaluno_route():
+    dados_usuario = request.user
+    if dados_usuario['tipo'] == 'Aluno':
+        return 'Sem permissão!', 403
+
+    dados_recebidos = request.json
+
+    msg, status_code = cria_aluno_conteudo(dados_recebidos)
+    if status_code > 300:
+        return {
+            "error": msg
+        }, status_code
+
+    return {
+        "message": msg
+    }, status_code
+
 @conteudo_rotas.route('/conteudoaluno/<id_conteudo>', methods=["GET"])
 @validate_token
 def aluno_conteudo_route(id_conteudo):
@@ -112,22 +135,3 @@ def conteudo_aluno_route(id_aluno):
     return {
         "aluno_conteudo": resultado
     }
-
-@conteudo_rotas.route('/criaalunoconteudo', methods=["POST"])
-@validate_token
-def cria_conteudoaluno_route():
-    dados_usuario = request.user
-    if dados_usuario['tipo'] == 'Aluno':
-        return 'Sem permissão!', 403
-
-    dados_recebidos = request.json
-
-    msg, status_code = cria_aluno_conteudo(dados_recebidos)
-    if status_code > 300:
-        return {
-            "error": msg
-        }, status_code
-
-    return {
-        "message": msg
-    }, status_code

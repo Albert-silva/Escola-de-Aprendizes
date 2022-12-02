@@ -16,15 +16,16 @@ def login_diretor():
         return msg, 400
 
     # processamento
-    msg, status = login_dir(dados_recebido)
+    msg, user_id, status = login_dir(dados_recebido)
     if status >= 400:
         return msg, status
     
     # formatamos o retorno
     return {
-        'messagem':  'Bem-Vindo, login realizado com Sucesso!',
+        'menssagem':  'Bem-Vindo, login realizado com Sucesso!',
         'email': dados_recebido['email'],
-        'token': msg
+        'token': msg,
+        'user_id': user_id
     }
     
     
@@ -36,15 +37,16 @@ def login_professor():
         return msg, 400
 
     # processamento
-    msg, status = login_pro(dados_recebido)
+    msg, user_id, status = login_pro(dados_recebido)
     if status >= 400:
         return msg, status
     
     # formatamos o retorno
     return {
-        'messagem': 'Bem-Vindo, login realizado com Sucesso!',
+        'menssagem': 'Bem-Vindo, login realizado com Sucesso!',
         'email': dados_recebido['email'],
-        'token': msg
+        'token': msg,
+        'user_id': user_id
     }
 
 @auth_rotas.route('/login/aluno', methods=["POST"])
@@ -61,7 +63,7 @@ def login_aluno():
     
     # formatamos o retorno
     return {
-        'messagem': 'Bem-Vindo, login realizado com Sucesso!',
+        'menssagem': 'Bem-Vindo, login realizado com Sucesso!',
         'email': dados_recebido['email'],
         'token': msg
     }
@@ -124,7 +126,7 @@ def mostrar_usuario_dir():
 def mostrar_usuario_pro():
     dados_recebidos = request.args
     dados_usuarios = request.user
-    if dados_usuarios ['tipo'] != 'Diretor' or dados_usuarios ['tipo'] == 'Alunos' or (dados_usuarios ['tipo'] == 'Professores' or dados_usuarios['id'] != int (dados_recebidos['id'])):
+    if dados_usuarios ['tipo'] != 'Diretor' and dados_usuarios ['tipo'] == 'Alunos' and (dados_usuarios ['tipo'] == 'Professores' or dados_usuarios['id'] != int (dados_recebidos['id'])):
         return 'Usuário não autorizado!', 403
 
     msg, status = validate_user_id (dados_recebidos)

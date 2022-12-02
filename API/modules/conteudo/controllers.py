@@ -1,9 +1,17 @@
 from database import mysql
 
-def lista_conteudos():
+def lista_conteudos(user_id):
     cursor = mysql.get_db().cursor()
 
-    cursor.execute("SELECT * FROM Conteudo INNER JOIN Professores on Conteudo.id_professor = Professores.id")
+    if user_id:
+        cursor.execute('''
+            SELECT * FROM Conteudo
+            INNER JOIN Professores on Conteudo.id_professor = Professores.id 
+            INNER JOIN Aluno_conteudo on Conteudo.id = Aluno_conteudo.id_conteudo
+            WHERE Aluno_conteudo.id_aluno = %s
+        ''', [user_id])
+    else:
+        cursor.execute("SELECT * FROM Conteudo INNER JOIN Professores on Conteudo.id_professor = Professores.id")
 
     conteudos_db = cursor.fetchall()
 
@@ -70,7 +78,7 @@ def cria_conteudo(dados_conteudo):
     if conteudo:
         return 'Conteudo já existe no banco de dados', 409
 
-    cursor.execute("INSERT INTO Conteudo (nome, descricao, id_professor) VALUES (%s, %s, %s, %s)", 
+    cursor.execute("INSERT INTO Conteudo (nome, descricao, id_professor) VALUES (%s, %s, %s)", 
         [nome, descricao, id_professor])
 
     mysql.get_db().commit()
@@ -159,14 +167,10 @@ def cria_aluno_conteudo (dados_recebidos):
     id_conteudo = dados_recebidos['id_conteudo']
     id_aluno = dados_recebidos['id_aluno']
 
-    try:
-        cursor.execute("INSERT INTO Aluno_conteudo (id_conteudo, id_aluno) VALUES (%s, %s)", 
-        [id_conteudo, id_aluno])
+    cursor.execute("INSERT INTO Aluno_conteudo (id_conteudo, id_aluno) VALUES (%s, %s)", 
+    [id_conteudo, id_aluno])
 
-        mysql.get_db().commit()
-    except:
-        
-        return 'Revise os dados enviados', 404
+    mysql.get_db().commit()
 
     cursor.close()
 
