@@ -9,10 +9,10 @@
         <v-form ref="form" v-model="valid" lazy-validation
             style="background: #FFF; border-radius: 5px; padding: 20px; margin: 20px">
 
-            <v-text-field v-model="id_aluno" :rules="numberRules" label="ID Aluno" outlined required></v-text-field>
-            <v-text-field v-model="id_conteudo" :rules="numberRules" label="ID Conteudo" outlined required></v-text-field>
+            <v-select v-model="aluno_selecionado" label="Aluno" :items="todos_alunos" item-text="name" item-value="id" return-object outlined></v-select>
+            <v-select v-model="conteudo_selecionado" label="Conteudo" :items="todos_conteudos" item-text="name" item-value="id" return-object outlined></v-select>
 
-            <v-btn :disabled="!valid" color="success" class="mr-4" @click="alunoconteudo">
+            <v-btn :disabled="!valid" color="success" class="mr-4" @click="criaalunoconteudo">
                 Adicionar
             </v-btn>
 
@@ -25,28 +25,67 @@
 
 <script>
 import ConteudoService from "../services/Conteudo";
+import AuthService from "../services/Auth";
+
 export default {
     data() {
         return {
             valid: false,
             finish: false,
-            id_aluno: '',
             id_conteudo: '',
             numberRules: [
                 v => !!v || 'Id do aluno e do conteudo são obrigatórios'
             ],
+            
+            aluno_selecionado: null,
+            todos_alunos: [],
+            
+            conteudo_selecionado: null,
+            todos_conteudos: []
         }
     },
     mounted() {
+        // pegar a lista de alunos disponiveis
+        this.getAlunos();
+        // pegar a lista de conteudos disponiveis
+        this.getConteudo();
     },
     methods: {
-        async alunoconteudo() {
+        async getAlunos() {
+            try {
+                const response = await AuthService.getAlunos();
+                this.todos_alunos = response.data.users_list.map(user => {
+                    return {
+                        'id': user.id,
+                        'name': user.Nome
+                    }
+                });
+
+            } catch(err) {
+                console.log(err);
+            }
+        },
+        async getConteudo() {
+            try {
+                const response = await ConteudoService.getAll();
+                this.todos_conteudos = response.data.conteudos.map(conteudo => {
+                    return {
+                        'id': conteudo.id,
+                        'name': conteudo.nome
+                    }
+                })
+
+            } catch(err) {
+                console.log(err);
+            }
+        },
+        async criaalunoconteudo() {
             try {
                 const data = {
-                    id_aluno: this.id_aluno,
-                    id_conteudo: this.id_conteudo
+                    id_aluno: this.aluno_selecionado.id,
+                    id_conteudo: this.conteudo_selecionado.id
                 }
-                await ConteudoService.add(data);
+                await ConteudoService.alunoconteudo(data);
                 
                 this.finish = true;
                 this.reset();

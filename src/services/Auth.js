@@ -13,11 +13,11 @@ export default {
     loginAluno (data){
         return Api({}).post('/login/aluno', data)
     },
-    getUsers () {
-        return Api({}).get('/professor')
+    getAlunos () {
+        return Api({}).get('/aluno')
     },
 
     getUser (idProfessor) {
-        return Api({}).get('/professor?id=' + idProfessor)
+        return Api({}).get('/usuario/professor?id=' + idProfessor)
     },
 }

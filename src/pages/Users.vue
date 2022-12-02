@@ -1,12 +1,12 @@
 <template>
     <div>
         <div>
-            <h1>Usuários</h1>
+            <h1>Alunos</h1>
         </div>
 
         <div style="margin-top: 25px">
             <v-data-table :headers="headers" :items="users" class="elevation-1"
-                no-data-text="Não encontramos usuários cadastrados.">
+                no-data-text="Não encontramos alunos cadastrados.">
             </v-data-table>
         </div>
     </div>
@@ -25,17 +25,23 @@ export default {
         }
     },
     mounted() {
-        this.getUsers();
+        const tipoUsuario = localStorage.getItem("tipo");
+        if (tipoUsuario != "professor" && tipoUsuario != "diretor") {
+            alert('Você nao tem permissão!');
+            this.$router.push({path: '/dash/profile'});
+        }
+
+        this.getAlunos();
     },
     methods: {
-        async getUsers() {
+        async getAlunos() {
             try {
-                const response = await AuthService.getUsers();
+                const response = await AuthService.getAlunos();
                 this.users = response.data.users_list.map(user => {
                     return {
                         id: user.id,
-                        name: user.name,
-                        email: user.email
+                        name: user.Nome,
+                        email: user.Email
                     }
                 });
             } catch (err) {

@@ -43,6 +43,11 @@ export default {
         }
     },
     mounted() {
+        const tipoUsuario = localStorage.getItem("tipo");
+        if (tipoUsuario != "professor" && tipoUsuario != "diretor") {
+            alert('Você nao tem permissão!');
+            this.$router.push({path: '/dash/profile'});
+        }
     },
     methods: {
         async addConteudo() {

@@ -25,6 +25,6 @@ export default {
     },
     
     alunoconteudo (dados) {
-        return Api({}).post('/conteudo/', dados)
+        return Api({}).post('/conteudo/criaalunoconteudo/', dados)
     }
 }

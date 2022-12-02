@@ -50,6 +50,8 @@ export default {
         if (this.tipo == "Diretor"){
         const resposta = await AuthService.loginDiretor(credentials);
         localStorage.setItem("token", resposta.data.token);
+        localStorage.setItem("userId", resposta.data.user_id);
+        localStorage.setItem("tipo", "diretor");
 
         this.$router.push({path: '/dash'});
         }
@@ -57,6 +59,8 @@ export default {
         else if (this.tipo == "Professor"){
         const resposta = await AuthService.loginProfessor(credentials);
         localStorage.setItem("token", resposta.data.token);
+        localStorage.setItem("userId", resposta.data.user_id);
+        localStorage.setItem("tipo", "professor");
 
         this.$router.push({path: '/dash'});
         }
@@ -64,6 +68,9 @@ export default {
         else if (this.tipo == "Aluno"){
         const resposta = await AuthService.loginAluno(credentials);
         localStorage.setItem("token", resposta.data.token);
+        localStorage.setItem("userId", resposta.data.user_id);
+        localStorage.setItem("tipo", "aluno");
+
         this.$router.push({path: '/dash'});
 
         }

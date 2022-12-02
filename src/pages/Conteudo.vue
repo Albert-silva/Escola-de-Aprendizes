@@ -3,7 +3,7 @@
         <div style="display: flex; justify-content: space-between; align-items: center;">
             <h1>Conteudos</h1>
 
-            <v-btn color="blue-grey" class="ma-2 white--text" @click="goToAdd()">
+            <v-btn color="blue-grey" class="ma-2 white--text" @click="goToAdd()" v-if="tipoUsuario !== 'aluno'">
                 <v-icon left dark>
                     add
                 </v-icon>
@@ -16,13 +16,13 @@
                 no-data-text="Não encontramos conteudos cadastrados.">
 
                 <template v-slot:[`item.actions`]="{ item }">
-                    <v-btn class="mx-2" fab dark small color="primary" :to="'/dash/edit-conteudo/' + item.id">
+                    <v-btn class="mx-2" fab dark small color="primary" :to="'/dash/edit-conteudo/' + item.id" v-if="tipoUsuario !== 'aluno'">
                         <v-icon dark>
                             edit
                         </v-icon>
                     </v-btn>
 
-                    <v-btn class="mx-2" fab dark small color="red" @click="dialogCancelar = true; idParaCancelar = item.id;">
+                    <v-btn class="mx-2" fab dark small color="red" @click="dialogCancelar = true; idParaCancelar = item.id;" v-if="tipoUsuario !== 'aluno'">
                         <v-icon dark>
                             delete
                         </v-icon>
@@ -66,10 +66,13 @@ export default {
             ],
             conteudos: [],
             dialogCancelar: false,
-            idParaCancelar: null
+            idParaCancelar: null,
+            tipoUsuario: null
         }
     },
     mounted() {
+        this.tipoUsuario = localStorage.getItem("tipo");
+
         this.getConteudos();
     },
     methods: {
@@ -91,7 +94,7 @@ export default {
         },
         async excluirConteudo(idConteudo) {
             try {
-                await CategoryService.delete(idConteudo);
+                await ConteudoService.delete(idConteudo);
                 this.dialogCancelar = false;
                 this.getConteudos();
             } catch (err) {

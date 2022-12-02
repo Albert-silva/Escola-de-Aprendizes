@@ -45,10 +45,8 @@ export default {
   data: () => ({
     mini: true,
     items: [
-      ["groups", "Usuários", "/dash/users"],
       ["person", "Meu perfil", "/dash/profile"],
       ["format_list_bulleted", "Conteúdo", "/dash/conteudo"],
-      ["assignment", "Aluno e Conteúdo", "/dash/criaalunoconteudo"]
     ],
   }),
   components: {},
@@ -56,6 +54,16 @@ export default {
     if (!localStorage.getItem("token")) {
       this.logout();
     }
+
+    const tipoUsuario = localStorage.getItem("tipo");
+    if (tipoUsuario == 'professor') {
+      this.items = [
+        ["groups", "Alunos", "/dash/users"],
+        ["person", "Meu perfil", "/dash/profile"],
+        ["format_list_bulleted", "Conteúdo", "/dash/conteudo"],
+        ["assignment", "Aluno e Conteúdo", "/dash/criaalunoconteudo"]
+      ]
+    } 
   },
   methods: {
     logout() {
